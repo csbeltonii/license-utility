@@ -136,7 +136,7 @@ export const getCompany = (companyId: number): Company | undefined => {
 
 export const getCompanyAsync = async (
   accountNumber: number
-): Promise<Company | undefined> => {
+): Promise<Company> => {
   const request = new Request(`${webApiUrl}/Company/${accountNumber}`, {
     method: "get",
     headers: {
@@ -151,7 +151,14 @@ export const getCompanyAsync = async (
 
     return mapCompanyFromServer(body);
   } else {
-    return undefined;
+    return {
+      CompanyId: 0,
+      CompanyName: "",
+      AccountNumber: 0,
+      Licenses: 0,
+      LicensesMobileCount: 0,
+      TrialLicenses: 0,
+    };
   }
 };
 

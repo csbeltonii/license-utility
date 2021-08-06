@@ -25,16 +25,18 @@ const HomePage = () => {
   }, []);
 
   const handleSearchChange = async (data: FormData) => {
-    const companies: Company[] = await getCompaniesAsync();
+    // const companies: Company[] = await getCompaniesAsync();
 
-    const results: Company[] = companies.filter(
-      (company) =>
-        company.CompanyName.toLocaleLowerCase().includes(
-          data.search.toLocaleLowerCase().toString()
-        ) || company.AccountNumber === Number(data.search)
-    );
+    // const results: Company[] = companies.filter(
+    //   (company) =>
+    //     company.CompanyName.toLocaleLowerCase().includes(
+    //       data.search.toLocaleLowerCase().toString()
+    //     ) || company.AccountNumber === Number(data.search)
+    // );
 
-    setCompanies(results);
+    // setCompanies(results);
+
+    navigate(`/search?search=${data.search}`);
   };
 
   return (
