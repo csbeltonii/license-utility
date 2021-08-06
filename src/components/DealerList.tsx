@@ -1,43 +1,14 @@
-import React from "react";
-import { Company, getCompaniesAsync } from "../data/companies";
+import { Company } from "../data/companies";
 import { useNavigate } from "react-router-dom";
-import { Table } from "reactstrap";
-import { FieldInput } from "./Styles/Styles";
-import { string } from "yargs";
 
-const DealerList = () => {
-  const [companies, setCompanies] = React.useState<Company[]>([]);
-  const [search, setSearch] = React.useState<string>("");
+interface Props {
+  companies: Company[];
+}
+const DealerList = ({ companies }: Props) => {
   const navigate = useNavigate();
-
-  React.useEffect(() => {
-    const doGetCompanies = async () => {
-      const companies: Company[] = await getCompaniesAsync();
-
-      setCompanies(companies);
-    };
-
-    doGetCompanies();
-  }, []);
 
   const handleRowClick = (accountNumber: number) => {
     navigate(`/dealer/${accountNumber}`);
-  };
-
-  const handleSearchChange = async () => {
-    if (search.length === 0) {
-      const companies: Company[] = await getCompaniesAsync();
-
-      setCompanies(companies);
-    } else {
-      const companies = await getCompaniesAsync();
-
-      const results: Company[] = companies.filter((company) =>
-        company.CompanyName.includes(search)
-      );
-
-      setCompanies(results);
-    }
   };
 
   const renderBody = () => {
@@ -58,9 +29,8 @@ const DealerList = () => {
   };
 
   return (
-    <div>
-      Search: <input type="text" onChange={() => handleSearchChange} />
-      <Table striped hover>
+    <div className="m-1">
+      <table className="table table-striped table-hover table-sm">
         <thead>
           <tr>
             <th>Account Number</th>
@@ -71,7 +41,7 @@ const DealerList = () => {
           </tr>
         </thead>
         <tbody>{renderBody()}</tbody>
-      </Table>
+      </table>
     </div>
   );
 };

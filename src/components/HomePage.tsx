@@ -1,10 +1,71 @@
+import React from "react";
 import Page from "./Page";
 import DealerList from "./DealerList";
+import { Company, getCompaniesAsync } from "../data/companies";
+import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 
-const HomePage = (  ) => {
+type FormData = {
+  search: string;
+};
+
+const HomePage = () => {
+  const [companies, setCompanies] = React.useState<Company[]>([]);
+  const { register, handleSubmit } = useForm<FormData>();
+  const navigate = useNavigate();
+
+  React.useEffect(() => {
+    const doGetCompanies = async () => {
+      const companies: Company[] = await getCompaniesAsync();
+
+      setCompanies(companies);
+    };
+
+    doGetCompanies();
+  }, []);
+
+  const handleSearchChange = async (data: FormData) => {
+    const companies: Company[] = await getCompaniesAsync();
+
+    const results: Company[] = companies.filter(
+      (company) =>
+        company.CompanyName.toLocaleLowerCase().includes(
+          data.search.toLocaleLowerCase().toString()
+        ) || company.AccountNumber === Number(data.search)
+    );
+
+    setCompanies(results);
+  };
+
   return (
     <Page title="Dealer List">
-      <DealerList />
+      <div className="container">
+        <div className="col-5 m-1">
+          <form
+            className="d-flex"
+            method="get"
+            id="search-form"
+            onSubmit={handleSubmit(handleSearchChange)}
+          >
+            <input
+              type="text"
+              id="search-bar"
+              className="form-control mt-2 mb-2"
+              ref={register}
+              name="search"
+              placeholder="Search by Account Number or Dealership"
+            />
+            <button
+              type="submit"
+              className="btn btn-primary m-2"
+              id="btn-submit"
+            >
+              Search
+            </button>
+          </form>
+        </div>
+        <DealerList companies={companies} />
+      </div>
     </Page>
   );
 };

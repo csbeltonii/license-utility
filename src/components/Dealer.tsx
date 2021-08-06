@@ -4,7 +4,7 @@ import React from "react";
 import { Company, getCompanyAsync, updateCompany } from "../data/companies";
 import { useParams } from "react-router-dom";
 import Page from "./Page";
-import { Form, Button } from "reactstrap";
+import { Form } from "reactstrap";
 import { useForm } from "react-hook-form";
 import {
   FieldContainer,
@@ -57,63 +57,59 @@ const Dealer = () => {
   };
 
   return (
-    <Page title={`Update licenses from ${company?.CompanyName}`}>
-      <div
-        css={css`
-          text-align: center;
-        `}
+    <Page title={`Update ${company?.CompanyName}`}>
+      <Form
+        onSubmit={handleSubmit(submitForm)}
+        disabled={formState.isSubmitting}
       >
-        <Form
-          onSubmit={handleSubmit(submitForm)}
-          disabled={formState.isSubmitting}
-        >
-          <input
-            ref={register}
-            defaultValue={company?.CompanyId}
-            type="text"
-            name="companyId"
-            id="companyId"
-            hidden
-            readOnly
-          />
-          <Fieldset>
-            <FieldContainer>
-              <FieldLabel htmlFor="licenseCount">Desktop Licenses</FieldLabel>
-              <FieldInput
-                type="number"
-                min="0"
-                ref={register}
-                defaultValue={company?.Licenses}
-                id="licenseCount"
-                name="licenseCount"
-              />
-            </FieldContainer>
-            <FieldContainer>
-              <FieldLabel htmlFor="mobileCount">Mobile Licenses</FieldLabel>
-              <FieldInput
-                ref={register}
-                defaultValue={company?.LicensesMobileCount}
-                type="number"
-                min="0"
-                id="mobileLicenseCount"
-                name="mobileLicenseCount"
-              />
-            </FieldContainer>
-            <FieldContainer>
-              <FieldLabel htmlFor="trialCount">Trial Licenses</FieldLabel>
-              <FieldInput
-                ref={register}
-                defaultValue={company?.TrialLicenses}
-                type="number"
-                min="0"
-                id="trialLicenseCount"
-                name="trialLicenseCount"
-              />
-            </FieldContainer>
-            <Button color="primary">Submit</Button>
-          </Fieldset>
-        </Form>
-      </div>
+        <input
+          ref={register}
+          defaultValue={company?.CompanyId}
+          type="text"
+          name="companyId"
+          id="companyId"
+          hidden
+          readOnly
+        />
+        <Fieldset>
+          <FieldContainer>
+            <FieldLabel htmlFor="licenseCount">Desktop Licenses</FieldLabel>
+            <FieldInput
+              type="number"
+              min="0"
+              ref={register}
+              defaultValue={company?.Licenses}
+              id="licenseCount"
+              name="licenseCount"
+            />
+          </FieldContainer>
+          <FieldContainer>
+            <FieldLabel htmlFor="mobileCount">Mobile Licenses</FieldLabel>
+            <FieldInput
+              ref={register}
+              defaultValue={company?.LicensesMobileCount}
+              type="number"
+              min="0"
+              id="mobileLicenseCount"
+              name="mobileLicenseCount"
+            />
+          </FieldContainer>
+          <FieldContainer>
+            <FieldLabel htmlFor="trialCount">Trial Licenses</FieldLabel>
+            <FieldInput
+              ref={register}
+              defaultValue={company?.TrialLicenses}
+              type="number"
+              min="0"
+              id="trialLicenseCount"
+              name="trialLicenseCount"
+            />
+          </FieldContainer>
+          <button className="btn btn-primary" type="submit" id="btn-submit">
+            Submit
+          </button>
+        </Fieldset>
+      </Form>
     </Page>
   );
 };
