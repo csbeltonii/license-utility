@@ -25,8 +25,6 @@ const DealerList = () => {
   };
 
   const handleSearchChange = async () => {
-    setSearch()
-
     if (search.length === 0) {
       const companies: Company[] = await getCompaniesAsync();
 
