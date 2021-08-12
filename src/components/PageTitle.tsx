@@ -9,7 +9,7 @@ interface Props {
 const PageTitle = ({ title }: Props) => {
   return (
     <div className="text-center">
-      <h1 className="display-6">{title}</h1>
+      <h1 className="h1">{title}</h1>
     </div>
   );
 };

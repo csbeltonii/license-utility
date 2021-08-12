@@ -11,7 +11,14 @@ interface Props {
 
 const Page = ({ children, title }: Props) => {
   return (
-    <div className="container" id="dealer-list">
+    <div
+      className="container"
+      id="dealer-list"
+      css={css`
+        background-color: white;
+        padding: 20px;
+      `}
+    >
       {<PageTitle title={title} />}
       {children}
     </div>

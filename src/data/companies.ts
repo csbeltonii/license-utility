@@ -3,12 +3,20 @@ import { NumericLiteral } from "typescript";
 const webApiUrl = "https://localhost:44375/api";
 
 export interface Company {
-  CompanyId: number;
-  CompanyName: string;
-  AccountNumber: number;
-  Licenses: number;
-  LicensesMobileCount: number;
-  TrialLicenses: number;
+  companyId: number;
+  companyName: string;
+  accountNumber: number;
+  licenses: number;
+  licensesMobileCount: number;
+  trialLicenses: number;
+}
+
+export interface LicenseChange {
+  companyId: number;
+  licenseBefore: number;
+  licenseAfter: number;
+  changeDate: Date;
+  changeType: string;
 }
 
 interface CompanyFromServer {
@@ -72,12 +80,12 @@ interface CompanyFromServer {
 }
 
 const mapCompanyFromServer = (data: CompanyFromServer): Company => ({
-  CompanyId: data.companyId,
-  CompanyName: data.companyName,
-  AccountNumber: data.accountNumber,
-  Licenses: data.licenses,
-  LicensesMobileCount: data.licensesMobileCount,
-  TrialLicenses: data.trialLicenses === null ? 0 : data.trialLicenses,
+  companyId: data.companyId,
+  companyName: data.companyName,
+  accountNumber: data.accountNumber,
+  licenses: data.licenses,
+  licensesMobileCount: data.licensesMobileCount,
+  trialLicenses: data.trialLicenses === null ? 0 : data.trialLicenses,
 });
 
 export const getCompanies = (): Company[] => {
@@ -92,12 +100,12 @@ export const getCompanies = (): Company[] => {
     let num = Math.round(Math.random() * 100);
 
     companyList.push({
-      CompanyId: companyId,
-      CompanyName: `Test Company ${num}`,
-      AccountNumber: accountNumber,
-      Licenses: Math.round(licenseNum),
-      LicensesMobileCount: Math.round(mobileNum),
-      TrialLicenses: Math.round(trialNum),
+      companyId: companyId,
+      companyName: `Test Company ${num}`,
+      accountNumber: accountNumber,
+      licenses: Math.round(licenseNum),
+      licensesMobileCount: Math.round(mobileNum),
+      trialLicenses: Math.round(trialNum),
     });
 
     companyId++;
@@ -129,7 +137,7 @@ export const getCompaniesAsync = async (): Promise<Company[]> => {
 export const getCompany = (companyId: number): Company | undefined => {
   const companyList = getCompanies();
 
-  let company = companyList.find((company) => company.CompanyId === companyId);
+  let company = companyList.find((company) => company.companyId === companyId);
 
   return company;
 };
@@ -152,12 +160,12 @@ export const getCompanyAsync = async (
     return mapCompanyFromServer(body);
   } else {
     return {
-      CompanyId: 0,
-      CompanyName: "",
-      AccountNumber: 0,
-      Licenses: 0,
-      LicensesMobileCount: 0,
-      TrialLicenses: 0,
+      companyId: 0,
+      companyName: "",
+      accountNumber: 0,
+      licenses: 0,
+      licensesMobileCount: 0,
+      trialLicenses: 0,
     };
   }
 };
@@ -166,7 +174,7 @@ export const updateCompany = async (
   updatedCompany: Company
 ): Promise<boolean> => {
   const request = new Request(
-    `${webApiUrl}/Company/${updatedCompany.CompanyId}`,
+    `${webApiUrl}/Company/${updatedCompany.companyId}`,
     {
       method: "post",
       body: JSON.stringify(updatedCompany),
@@ -182,5 +190,26 @@ export const updateCompany = async (
     return true;
   } else {
     return false;
+  }
+};
+
+export const getLicenseChanges = async (
+  companyId: number
+): Promise<LicenseChange[]> => {
+  const request = new Request(`${webApiUrl}/LicenseChange/${companyId}`, {
+    method: "get",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  const response = await fetch(request);
+
+  if (response.ok) {
+    const changes = await response.json();
+
+    return changes;
+  } else {
+    return [];
   }
 };

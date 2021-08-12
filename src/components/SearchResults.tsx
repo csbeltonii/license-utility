@@ -16,9 +16,10 @@ const SearchResults = () => {
 
       const results: Company[] = companies.filter(
         (company) =>
-          company.CompanyName.toLocaleLowerCase().includes(
-            search.toLocaleLowerCase().toString()
-          ) || company.AccountNumber === Number(search)
+          company.companyName
+            .toLocaleLowerCase()
+            .includes(search.toLocaleLowerCase().toString()) ||
+          company.accountNumber === Number(search)
       );
 
       setSearchResults(results);

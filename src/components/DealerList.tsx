@@ -15,14 +15,14 @@ const DealerList = ({ companies }: Props) => {
     return companies?.map((company: Company) => {
       return (
         <tr
-          key={company.CompanyId}
-          onClick={() => handleRowClick(company.AccountNumber)}
+          key={company.companyId}
+          onClick={() => handleRowClick(company.accountNumber)}
         >
-          <td>{company.AccountNumber}</td>
-          <td>{company.CompanyName}</td>
-          <td>{company.Licenses}</td>
-          <td>{company.LicensesMobileCount}</td>
-          <td>{company.TrialLicenses}</td>
+          <td>{company.accountNumber}</td>
+          <td>{company.companyName}</td>
+          <td>{company.licenses}</td>
+          <td>{company.licensesMobileCount}</td>
+          <td>{company.trialLicenses}</td>
         </tr>
       );
     });
@@ -33,9 +33,9 @@ const DealerList = ({ companies }: Props) => {
       <table className="table table-striped table-hover table-sm">
         <thead>
           <tr>
-            <th>Account Number</th>
-            <th>Company Name</th>
-            <th>Desktop Licenses</th>
+            <th>Account #</th>
+            <th>Company</th>
+            <th>Desktop</th>
             <th>Mobile Licenses</th>
             <th>Trial Licenses</th>
           </tr>

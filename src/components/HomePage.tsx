@@ -40,7 +40,7 @@ const HomePage = () => {
   };
 
   return (
-    <Page title="Dealer List">
+    <Page title="Dealers">
       <div className="container">
         <div className="col-5 m-1">
           <form
