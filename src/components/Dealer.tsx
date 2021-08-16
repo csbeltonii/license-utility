@@ -1,5 +1,3 @@
-/**@jsxImportSource @emotion/react */
-import { css } from "@emotion/react";
 import React from "react";
 import {
   Company,
@@ -10,16 +8,9 @@ import {
 } from "../data/companies";
 import { useParams } from "react-router-dom";
 import Page from "./Page";
-import { Form } from "reactstrap";
 import { useForm } from "react-hook-form";
-import {
-  FieldContainer,
-  FieldInput,
-  FieldLabel,
-  Fieldset,
-} from "./Styles/Styles";
+import { FieldInput } from "./Styles/Styles";
 import { useNavigate } from "react-router-dom";
-import { getuid, mainModule } from "process";
 
 type FormData = {
   companyId: number;
@@ -36,7 +27,7 @@ const Dealer = () => {
     []
   );
 
-  const { register, handleSubmit, formState } = useForm<FormData>({
+  const { register, handleSubmit } = useForm<FormData>({
     mode: "onBlur",
   });
 
@@ -70,8 +61,6 @@ const Dealer = () => {
   };
 
   const renderBody = () => {
-    console.log(licenseChanges);
-
     if (licenseChanges.length === 0)
       return (
         <tr>
