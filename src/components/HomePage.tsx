@@ -4,6 +4,7 @@ import DealerList from "./DealerList";
 import { Company, getCompaniesAsync } from "../data/companies";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
+import { PrimaryButton } from "./Styles/Styles";
 
 type FormData = {
   search: string;
@@ -25,24 +26,13 @@ const HomePage = () => {
   }, []);
 
   const handleSearchChange = async (data: FormData) => {
-    // const companies: Company[] = await getCompaniesAsync();
-
-    // const results: Company[] = companies.filter(
-    //   (company) =>
-    //     company.CompanyName.toLocaleLowerCase().includes(
-    //       data.search.toLocaleLowerCase().toString()
-    //     ) || company.AccountNumber === Number(data.search)
-    // );
-
-    // setCompanies(results);
-
     navigate(`/search?search=${data.search}`);
   };
 
   return (
     <Page title="Dealers">
       <div className="container">
-        <div className="col-5 m-1">
+        <div className="col-5 m-1 p-2">
           <form
             className="d-flex"
             method="get"
@@ -57,13 +47,13 @@ const HomePage = () => {
               name="search"
               placeholder="Search by Account Number or Dealership"
             />
-            <button
+            <PrimaryButton
               type="submit"
-              className="btn btn-primary m-2"
+              className="btn btn-success m-2"
               id="btn-submit"
             >
               Search
-            </button>
+            </PrimaryButton>
           </form>
         </div>
         <DealerList companies={companies} />
