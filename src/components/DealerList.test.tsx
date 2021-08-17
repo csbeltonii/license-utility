@@ -1,29 +1,13 @@
 import { render, cleanup } from "@testing-library/react";
-import DealerList from "./components/DealerList";
-import { Company } from "./data/companies";
+import DealerList from "./DealerList";
+import { Company } from "../data/companies";
 import { BrowserRouter } from "react-router-dom";
+import { getSampleCompanyList } from "../utility/companyFactory";
 
 afterEach(cleanup);
 
 test("When the component is rendered, the correct information should be displayed.", async () => {
-  const companies: Company[] = [
-    {
-      companyId: 1,
-      companyName: "Craig Test",
-      accountNumber: 1,
-      licenses: 1,
-      licensesMobileCount: 1,
-      trialLicenses: 1,
-    },
-    {
-      companyId: 2,
-      companyName: "Craig Test 2",
-      accountNumber: 1,
-      licenses: 1,
-      licensesMobileCount: 1,
-      trialLicenses: 1,
-    },
-  ];
+  const companies: Company[] = getSampleCompanyList();
 
   const { findByText } = render(
     <BrowserRouter>
