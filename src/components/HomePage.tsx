@@ -4,6 +4,7 @@ import DealerList from "./DealerList";
 import { Company, getCompaniesAsync } from "../data/companies";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
+import { PrimaryButton } from "./Styles/Styles";
 
 type FormData = {
   search: string;
@@ -31,7 +32,7 @@ const HomePage = () => {
   return (
     <Page title="Dealers">
       <div className="container">
-        <div className="col-5 m-1">
+        <div className="col-5 m-1 p-2">
           <form
             className="d-flex"
             method="get"
@@ -46,13 +47,13 @@ const HomePage = () => {
               name="search"
               placeholder="Search by Account Number or Dealership"
             />
-            <button
+            <PrimaryButton
               type="submit"
-              className="btn btn-primary m-2"
+              className="btn btn-success m-2"
               id="btn-submit"
             >
               Search
-            </button>
+            </PrimaryButton>
           </form>
         </div>
         <DealerList companies={companies} />

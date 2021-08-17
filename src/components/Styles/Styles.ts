@@ -58,3 +58,9 @@ export const FieldLabel = styled.label`
 export const FieldInput = styled.input`
   ${baseFieldCSS}
 `;
+
+export const PrimaryButton = styled.button`
+  background-color: rgb(119, 184, 0);
+`;
+
+export const Table = styled.table``;

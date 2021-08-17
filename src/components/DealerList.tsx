@@ -20,24 +20,24 @@ const DealerList = ({ companies }: Props) => {
         >
           <td>{company.accountNumber}</td>
           <td>{company.companyName}</td>
-          <td>{company.licenses}</td>
-          <td>{company.licensesMobileCount}</td>
-          <td>{company.trialLicenses}</td>
+          <td className="text-end">{company.licenses}</td>
+          <td className="text-end">{company.licensesMobileCount}</td>
+          <td className="text-end">{company.trialLicenses}</td>
         </tr>
       );
     });
   };
 
   return (
-    <div className="m-1">
-      <table className="table table-striped table-hover table-sm">
+    <div className="m-1 p-2">
+      <table className="table table-hover table-sm">
         <thead>
           <tr>
             <th>Account #</th>
             <th>Company</th>
-            <th>Desktop</th>
-            <th>Mobile Licenses</th>
-            <th>Trial Licenses</th>
+            <th className="text-end">Desktop</th>
+            <th className="text-end">Mobile</th>
+            <th className="text-end">Trial</th>
           </tr>
         </thead>
         <tbody>{renderBody()}</tbody>

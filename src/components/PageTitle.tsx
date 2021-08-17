@@ -1,17 +1,9 @@
-/**@jsxImportSource @emotion/react */
-import { css } from "@emotion/react";
-import React from "react";
-
 interface Props {
   title: string;
 }
 
 const PageTitle = ({ title }: Props) => {
-  return (
-    <div className="text-center">
-      <h1 className="h1">{title}</h1>
-    </div>
-  );
+  return <h1 className="jumbrotron m-1 p-3">{title}</h1>;
 };
 
 export default PageTitle;
