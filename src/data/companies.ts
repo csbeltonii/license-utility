@@ -1,5 +1,3 @@
-import { NumericLiteral } from "typescript";
-
 const webApiUrl = "https://localhost:44375/api";
 
 export interface Company {
@@ -88,33 +86,6 @@ const mapCompanyFromServer = (data: CompanyFromServer): Company => ({
   trialLicenses: data.trialLicenses === null ? 0 : data.trialLicenses,
 });
 
-export const getCompanies = (): Company[] => {
-  let companyList: Company[] = [];
-  let companyId: number = 1;
-  let accountNumber: number = 30000;
-
-  for (let i = 0; i < 20; i++) {
-    let licenseNum = Math.random() * 10;
-    let mobileNum = Math.random() * 10;
-    let trialNum = Math.random() * 5;
-    let num = Math.round(Math.random() * 100);
-
-    companyList.push({
-      companyId: companyId,
-      companyName: `Test Company ${num}`,
-      accountNumber: accountNumber,
-      licenses: Math.round(licenseNum),
-      licensesMobileCount: Math.round(mobileNum),
-      trialLicenses: Math.round(trialNum),
-    });
-
-    companyId++;
-    accountNumber++;
-  }
-
-  return companyList;
-};
-
 export const getCompaniesAsync = async (): Promise<Company[]> => {
   let request = new Request(`${webApiUrl}/Company/companies`, {
     method: "get",
@@ -132,14 +103,6 @@ export const getCompaniesAsync = async (): Promise<Company[]> => {
   } else {
     return [];
   }
-};
-
-export const getCompany = (companyId: number): Company | undefined => {
-  const companyList = getCompanies();
-
-  let company = companyList.find((company) => company.companyId === companyId);
-
-  return company;
 };
 
 export const getCompanyAsync = async (
