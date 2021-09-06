@@ -5,6 +5,7 @@ import { Company, getCompaniesAsync } from "../data/companies";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { PrimaryButton } from "./Styles/Styles";
+import DealerListSearch from "./DealerListSearch";
 
 type FormData = {
   search: string;
@@ -12,7 +13,6 @@ type FormData = {
 
 const HomePage = () => {
   const [companies, setCompanies] = React.useState<Company[]>([]);
-  const { register, handleSubmit } = useForm<FormData>();
   const navigate = useNavigate();
 
   React.useEffect(() => {
@@ -32,30 +32,7 @@ const HomePage = () => {
   return (
     <Page title="Dealers">
       <div className="container">
-        <div className="col-5 m-1 p-2">
-          <form
-            className="d-flex"
-            method="get"
-            id="search-form"
-            onSubmit={handleSubmit(handleSearchChange)}
-          >
-            <input
-              type="text"
-              id="search-bar"
-              className="form-control mt-2 mb-2"
-              ref={register}
-              name="search"
-              placeholder="Search by Account Number or Dealership"
-            />
-            <PrimaryButton
-              type="submit"
-              className="btn btn-success m-2"
-              id="btn-submit"
-            >
-              Search
-            </PrimaryButton>
-          </form>
-        </div>
+        <DealerListSearch handleSearchChange={handleSearchChange} />
         <DealerList companies={companies} />
       </div>
     </Page>

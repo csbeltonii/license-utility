@@ -1,46 +1,28 @@
+import { FC } from "react";
 import { Company } from "../data/companies";
 import { useNavigate } from "react-router-dom";
+import DealerTableHeader from "./DealerTableHeader";
+import DealerTableBody from "./DealerTableBody";
 
 interface Props {
   companies: Company[];
 }
-const DealerList = ({ companies }: Props) => {
+
+const DealerList: FC<Props> = ({ companies }) => {
   const navigate = useNavigate();
 
   const handleRowClick = (accountNumber: number) => {
     navigate(`/dealer/${accountNumber}`);
   };
 
-  const renderBody = () => {
-    return companies?.map((company: Company) => {
-      return (
-        <tr
-          key={company.companyId}
-          onClick={() => handleRowClick(company.accountNumber)}
-        >
-          <td>{company.accountNumber}</td>
-          <td>{company.companyName}</td>
-          <td className="text-end">{company.licenses}</td>
-          <td className="text-end">{company.licensesMobileCount}</td>
-          <td className="text-end">{company.trialLicenses}</td>
-        </tr>
-      );
-    });
-  };
-
   return (
     <div className="m-1 p-2">
       <table className="table table-hover table-sm">
-        <thead>
-          <tr>
-            <th>Account #</th>
-            <th>Company</th>
-            <th className="text-end">Desktop</th>
-            <th className="text-end">Mobile</th>
-            <th className="text-end">Trial</th>
-          </tr>
-        </thead>
-        <tbody>{renderBody()}</tbody>
+        <DealerTableHeader />
+        <DealerTableBody
+          companies={companies}
+          handleRowClick={handleRowClick}
+        />
       </table>
     </div>
   );

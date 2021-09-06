@@ -7,6 +7,7 @@ export interface Company {
   licenses: number;
   licensesMobileCount: number;
   trialLicenses: number;
+  licenseChanges: [];
 }
 
 export interface LicenseChange {
@@ -84,6 +85,7 @@ const mapCompanyFromServer = (data: CompanyFromServer): Company => ({
   licenses: data.licenses,
   licensesMobileCount: data.licensesMobileCount,
   trialLicenses: data.trialLicenses === null ? 0 : data.trialLicenses,
+  licenseChanges: [],
 });
 
 export const getCompaniesAsync = async (): Promise<Company[]> => {
@@ -129,6 +131,7 @@ export const getCompanyAsync = async (
       licenses: 0,
       licensesMobileCount: 0,
       trialLicenses: 0,
+      licenseChanges: [],
     };
   }
 };
