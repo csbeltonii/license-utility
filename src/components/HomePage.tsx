@@ -2,11 +2,9 @@ import { useState, useEffect } from "react";
 import Page from "./Page";
 import DealerList from "./DealerList";
 import { Company, getCompaniesAsync } from "../data/companies";
-import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import { PrimaryButton } from "./Styles/Styles";
 import DealerListSearch from "./DealerListSearch";
-import { networkInterfaces } from "os";
+import CustomPagination from "./CustomPagination";
 
 type FormData = {
   search: string;
@@ -14,64 +12,53 @@ type FormData = {
 
 const HomePage = () => {
   const [companies, setCompanies] = useState<Company[]>([]);
-  const [pageNumber, setPageNumber] = useState(0);
+  const [pageNumber, setPageNumber] = useState(1);
   const [pageSize, setPageSize] = useState(10);
-
   const navigate = useNavigate();
+  const endIndex: number = pageNumber * pageSize;
+  const startIndex: number = endIndex - pageSize;
+  const current: Company[] = companies.slice(startIndex, endIndex);
+  const lastPage: number = Math.round(companies.length / pageSize) + 1;
+  const disablePrevious: boolean = pageNumber === 1 ? true : false;
+  const disableNext: boolean = current.length < pageSize ? true : false;
 
   useEffect(() => {
-    const doGetCompanies = async (
-      currentPage: number,
-      currentPageSize: number
-    ) => {
-      const companies: Company[] = await getCompaniesAsync(
-        currentPage,
-        currentPageSize
-      );
+    const doGetCompanies = async () => {
+      const companies: Company[] = await getCompaniesAsync();
 
       setCompanies(companies);
     };
 
-    doGetCompanies(pageNumber, pageSize);
-  }, [pageNumber, pageSize]);
+    doGetCompanies();
+  }, []);
 
   const handleSearchChange = async (data: FormData) => {
     navigate(`/search?search=${data.search}`);
   };
 
-  const advancePage = () => {
+  const next = () => {
     let nextPageNumber = pageNumber + 1;
 
     setPageNumber(nextPageNumber);
   };
 
-  const previousPage = () => {
+  const previous = () => {
     let previousPageNumber = pageNumber - 1;
-
     setPageNumber(previousPageNumber);
   };
 
   return (
     <Page title="Dealers">
       <DealerListSearch handleSearchChange={handleSearchChange} />
-      <DealerList companies={companies} />
-      <div className="btn btn-group d-flex">
-        <button
-          className="btn btn-primary"
-          onClick={previousPage}
-          disabled={pageNumber === 0 ? true : false}
-        >
-          Previous
-        </button>
-        <button
-          id="btn-next"
-          className="btn btn-primary"
-          onClick={advancePage}
-          disabled={companies.length < pageSize ? true : false}
-        >
-          Next
-        </button>
-      </div>
+      <DealerList companies={current} />
+      <CustomPagination
+        nextPage={next}
+        previousPage={previous}
+        currentPage={pageNumber}
+        lastPage={lastPage}
+        disableNextButton={disableNext}
+        disablePreviousButton={disablePrevious}
+      />
     </Page>
   );
 };

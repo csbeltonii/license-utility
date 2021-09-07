@@ -88,19 +88,13 @@ const mapCompanyFromServer = (data: CompanyFromServer): Company => ({
   licenseChanges: [],
 });
 
-export const getCompaniesAsync = async (
-  pageNumber: number,
-  pageSize: number
-): Promise<Company[]> => {
-  let request = new Request(
-    `${webApiUrl}/Company/companies?pageNumber=${pageNumber}&pageSize=${pageSize}`,
-    {
-      method: "get",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }
-  );
+export const getCompaniesAsync = async (): Promise<Company[]> => {
+  let request = new Request(`${webApiUrl}/Company/companies`, {
+    method: "get",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
 
   const response = await fetch(request);
 

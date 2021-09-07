@@ -64,3 +64,7 @@ export const PrimaryButton = styled.button`
 `;
 
 export const Table = styled.table``;
+
+export const PageNumberIndicator = styled.span`
+  margin: 0.375rem 0.75rem;
+`;

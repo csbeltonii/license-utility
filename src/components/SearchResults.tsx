@@ -1,4 +1,4 @@
-import React from "react";
+import { useEffect, useState } from "react";
 import Page from "./Page";
 import { Company, getCompaniesAsync } from "../data/companies";
 import DealerList from "./DealerList";
@@ -6,13 +6,13 @@ import { Link, useSearchParams } from "react-router-dom";
 
 const SearchResults = () => {
   const [searchParams] = useSearchParams();
-  const [searchResults, setSearchResults] = React.useState<Company[]>([]);
+  const [searchResults, setSearchResults] = useState<Company[]>([]);
 
   const search: string | null = searchParams.get("search" || "");
 
-  React.useEffect(() => {
+  useEffect(() => {
     const doGetCompanies = async (search: string) => {
-      const companies: Company[] = await getCompaniesAsync(1, 10);
+      const companies: Company[] = await getCompaniesAsync();
 
       const results: Company[] = companies.filter(
         (company) =>
