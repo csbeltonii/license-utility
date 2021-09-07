@@ -12,7 +12,7 @@ const SearchResults = () => {
 
   React.useEffect(() => {
     const doGetCompanies = async (search: string) => {
-      const companies: Company[] = await getCompaniesAsync();
+      const companies: Company[] = await getCompaniesAsync(1, 10);
 
       const results: Company[] = companies.filter(
         (company) =>
