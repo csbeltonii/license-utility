@@ -1,39 +1,48 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, ChangeEvent, useCallback } from "react";
 import Page from "./Page";
 import DealerList from "./DealerList";
 import { Company, getCompaniesAsync } from "../data/companies";
-import { useNavigate } from "react-router-dom";
 import DealerListSearch from "./DealerListSearch";
 import CustomPagination from "./CustomPagination";
-
-type FormData = {
-  search: string;
-};
+import { Modal } from "reactstrap";
 
 const HomePage = () => {
-  const [companies, setCompanies] = useState<Company[]>([]);
+  const [fullCompaniesList, setFullCompaniesList] = useState<Company[]>([]);
+  const [companiesList, setCompaniesList] = useState<Company[]>([]);
   const [pageNumber, setPageNumber] = useState(1);
   const [pageSize, setPageSize] = useState(10);
-  const navigate = useNavigate();
+  const [modal, setModal] = useState<boolean>(false);
   const endIndex: number = pageNumber * pageSize;
   const startIndex: number = endIndex - pageSize;
-  const current: Company[] = companies.slice(startIndex, endIndex);
-  const lastPage: number = Math.round(companies.length / pageSize) + 1;
+  const currentPage: Company[] = companiesList.slice(startIndex, endIndex);
+  const lastPage: number = Math.round(companiesList.length / pageSize) + 1;
   const disablePrevious: boolean = pageNumber === 1 ? true : false;
-  const disableNext: boolean = current.length < pageSize ? true : false;
+  const disableNext: boolean = currentPage.length < pageSize ? true : false;
 
   useEffect(() => {
     const doGetCompanies = async () => {
       const companies: Company[] = await getCompaniesAsync();
 
-      setCompanies(companies);
+      setCompaniesList(companies);
+      setFullCompaniesList(companies);
     };
 
     doGetCompanies();
   }, []);
 
-  const handleSearchChange = async (data: FormData) => {
-    navigate(`/search?search=${data.search}`);
+  const handleSearchChange = async (event: ChangeEvent<HTMLInputElement>) => {
+    const searchCriteria = event.target.value.trim();
+    const companies = fullCompaniesList;
+
+    const results = companies.filter(
+      (company) =>
+        company.accountNumber === Number(searchCriteria) ||
+        company.companyName
+          .toLocaleLowerCase()
+          .includes(searchCriteria.toLocaleLowerCase())
+    );
+
+    setCompaniesList(results);
   };
 
   const next = () => {
@@ -47,10 +56,12 @@ const HomePage = () => {
     setPageNumber(previousPageNumber);
   };
 
+  const toggleModal = () => setModal(!modal);
+
   return (
     <Page title="Dealers">
       <DealerListSearch handleSearchChange={handleSearchChange} />
-      <DealerList companies={current} />
+      <DealerList companies={currentPage} openModal={toggleModal} />
       <CustomPagination
         nextPage={next}
         previousPage={previous}
@@ -59,6 +70,7 @@ const HomePage = () => {
         disableNextButton={disableNext}
         disablePreviousButton={disablePrevious}
       />
+      <Modal isOpen={modal} toggle={toggleModal}></Modal>
     </Page>
   );
 };

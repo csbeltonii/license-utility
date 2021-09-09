@@ -6,23 +6,15 @@ import DealerTableBody from "./DealerTableBody";
 
 interface Props {
   companies: Company[];
+  openModal: () => void;
 }
 
-const DealerList: FC<Props> = ({ companies }) => {
-  const navigate = useNavigate();
-
-  const handleRowClick = (accountNumber: number) => {
-    navigate(`/dealer/${accountNumber}`);
-  };
-
+const DealerList: FC<Props> = ({ companies, openModal }) => {
   return (
     <div className="m-1 p-2">
       <table className="table table-hover table-sm">
         <DealerTableHeader />
-        <DealerTableBody
-          companies={companies}
-          handleRowClick={handleRowClick}
-        />
+        <DealerTableBody companies={companies} handleRowClick={openModal} />
       </table>
     </div>
   );

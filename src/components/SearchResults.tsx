@@ -31,7 +31,7 @@ const SearchResults = () => {
   return (
     <Page title="Search Results">
       <div className="container">
-        <DealerList companies={searchResults} />
+        <DealerList companies={searchResults} openModal={() => {}} />
         <Link to="/" className="btn btn-primary">
           Back to Home
         </Link>
