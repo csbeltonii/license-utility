@@ -12,29 +12,27 @@ import Dealer from "./Dealer";
 
 const DealerContainer: FC = () => {
   const [company, setCompany] = useState<Company>();
+
   const [companyLicenseChanges, setCompanyLicenseChanges] = useState<
     LicenseChange[]
   >([]);
 
-  const searchParams = useSearchParams();
+  const { searchParams } = useSearchParams();
 
   useEffect(() => {
     const doGetCompany = async (accountNumber: number) => {
       const result = await getCompanyAsync(accountNumber);
+      const changes = await getLicenseChanges(result.companyId);
+
+      console.log(result);
+      console.log(changes);
+
       setCompany(result);
+      setCompanyLicenseChanges(changes);
     };
 
     doGetCompany(Number(searchParams));
-  });
-
-  useEffect(() => {
-    const doGetLicenseChanges = async (companyId: number) => {
-      const result = await getLicenseChanges(companyId);
-      setCompanyLicenseChanges(result);
-    };
-
-    doGetLicenseChanges(Number(company?.companyId));
-  });
+  }, [searchParams]);
 
   return (
     <Page title={String(company?.companyName)}>

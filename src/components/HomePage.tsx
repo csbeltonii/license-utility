@@ -63,7 +63,7 @@ const HomePage = () => {
       <DealerListSearch handleSearchChange={handleSearchChange} />
       <DealerList>
         <DealerTableHeader />
-        <DealerTableBody companies={currentPage} handleRowClick={openModal} />
+        <DealerTableBody companies={currentPage} />
       </DealerList>
       <CustomPagination
         nextPage={next}
