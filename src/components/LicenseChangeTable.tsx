@@ -2,7 +2,7 @@ import { FC } from "react";
 import { LicenseChange } from "../data/companies";
 
 type Props = {
-  licenseChanges: [];
+  licenseChanges: LicenseChange[];
 };
 
 const LicenseChangeTable: FC<Props> = ({ licenseChanges }) => {

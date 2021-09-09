@@ -1,17 +1,14 @@
-import logo from "./logo.svg";
 import "./App.css";
-
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import HomePage from "./components/HomePage";
-import Dealer from "./components/Dealer";
-import SearchResults from "./components/SearchResults";
+import DealerContainer from "./components/DealerContainer";
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<HomePage />} />
-        <Route path="/search" element={<SearchResults />} />
+        <Route path="/dealer/:accountnumber" element={<DealerContainer />} />
       </Routes>
     </BrowserRouter>
   );

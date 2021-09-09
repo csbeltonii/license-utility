@@ -1,17 +1,19 @@
-import { useState, useEffect, ChangeEvent, useCallback } from "react";
+import { useState, useEffect, ChangeEvent } from "react";
 import Page from "./Page";
 import DealerList from "./DealerList";
 import { Company, getCompaniesAsync } from "../data/companies";
 import DealerListSearch from "./DealerListSearch";
 import CustomPagination from "./CustomPagination";
-import { Modal } from "reactstrap";
+import DealerTableHeader from "./DealerTableHeader";
+import DealerTableBody from "./DealerTableBody";
 
 const HomePage = () => {
   const [fullCompaniesList, setFullCompaniesList] = useState<Company[]>([]);
   const [companiesList, setCompaniesList] = useState<Company[]>([]);
+
   const [pageNumber, setPageNumber] = useState(1);
   const [pageSize, setPageSize] = useState(10);
-  const [modal, setModal] = useState<boolean>(false);
+
   const endIndex: number = pageNumber * pageSize;
   const startIndex: number = endIndex - pageSize;
   const currentPage: Company[] = companiesList.slice(startIndex, endIndex);
@@ -56,12 +58,13 @@ const HomePage = () => {
     setPageNumber(previousPageNumber);
   };
 
-  const toggleModal = () => setModal(!modal);
-
   return (
     <Page title="Dealers">
       <DealerListSearch handleSearchChange={handleSearchChange} />
-      <DealerList companies={currentPage} openModal={toggleModal} />
+      <DealerList>
+        <DealerTableHeader />
+        <DealerTableBody companies={currentPage} handleRowClick={openModal} />
+      </DealerList>
       <CustomPagination
         nextPage={next}
         previousPage={previous}
@@ -70,7 +73,6 @@ const HomePage = () => {
         disableNextButton={disableNext}
         disablePreviousButton={disablePrevious}
       />
-      <Modal isOpen={modal} toggle={toggleModal}></Modal>
     </Page>
   );
 };

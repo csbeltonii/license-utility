@@ -13,6 +13,9 @@ const DealerTableBody: FC<Props> = ({ companies, handleRowClick }) => {
         return (
           <tr
             key={company.companyId}
+            data-bs-id={company.accountNumber}
+            data-bs-toggle="modal"
+            data-bs-target="#dealer-modal"
             onClick={() => handleRowClick(company.accountNumber)}
           >
             <td>{company.accountNumber}</td>

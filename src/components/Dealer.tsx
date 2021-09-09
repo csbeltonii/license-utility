@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import { FieldInput } from "./Styles/Styles";
 import { useNavigate } from "react-router-dom";
 import LicenseChangeTable from "./LicenseChangeTable";
+import { LicenseChange } from "../data/companies";
 
 type FormData = {
   companyId: number;
@@ -13,9 +14,8 @@ type FormData = {
 };
 
 type Props = {
-  company: Company;
-  licenseChanges: [];
-  submitForm: () => {};
+  company: Company | undefined;
+  licenseChanges: LicenseChange[];
 };
 
 const Dealer: FC<Props> = ({ company, licenseChanges }) => {
