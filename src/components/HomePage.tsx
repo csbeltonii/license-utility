@@ -1,4 +1,4 @@
-import { useState, useEffect, ChangeEvent } from "react";
+import { useState, useEffect, ChangeEvent, useCallback } from "react";
 import Page from "./Page";
 import DealerList from "./DealerList";
 import { Company, getCompaniesAsync } from "../data/companies";
@@ -6,6 +6,9 @@ import DealerListSearch from "./DealerListSearch";
 import CustomPagination from "./CustomPagination";
 import DealerTableHeader from "./DealerTableHeader";
 import DealerTableBody from "./DealerTableBody";
+import { useIsAuthenticated, useMsalAuthentication } from "@azure/msal-react";
+import { InteractionType } from "@azure/msal-browser";
+import { request } from "http";
 
 const HomePage = () => {
   const [fullCompaniesList, setFullCompaniesList] = useState<Company[]>([]);
@@ -14,6 +17,9 @@ const HomePage = () => {
   const [pageNumber, setPageNumber] = useState(1);
   const [pageSize, setPageSize] = useState(10);
 
+  const isAuthenticated = useIsAuthenticated();
+  const {} = useMsalAuthentication(InteractionType.Popup);
+
   const endIndex: number = pageNumber * pageSize;
   const startIndex: number = endIndex - pageSize;
   const currentPage: Company[] = companiesList.slice(startIndex, endIndex);
@@ -21,16 +27,16 @@ const HomePage = () => {
   const disablePrevious: boolean = pageNumber === 1 ? true : false;
   const disableNext: boolean = currentPage.length < pageSize ? true : false;
 
-  useEffect(() => {
-    const doGetCompanies = async () => {
-      const companies: Company[] = await getCompaniesAsync();
+  const getCompanies = useCallback(async () => {
+    const companies = await getCompaniesAsync();
 
-      setCompaniesList(companies);
-      setFullCompaniesList(companies);
-    };
-
-    doGetCompanies();
+    setCompaniesList(companies);
+    setFullCompaniesList(companies);
   }, []);
+
+  useEffect(() => {
+    getCompanies();
+  }, [getCompanies]);
 
   const handleSearchChange = async (event: ChangeEvent<HTMLInputElement>) => {
     const searchCriteria = event.target.value.trim();
