@@ -1,5 +1,5 @@
 import { FC, useEffect } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import Page from "./Page";
 import {
   Company,
@@ -17,12 +17,14 @@ const DealerContainer: FC = () => {
     LicenseChange[]
   >([]);
 
-  const { searchParams } = useSearchParams();
+  const { accountNumber } = useParams();
 
   useEffect(() => {
     const doGetCompany = async (accountNumber: number) => {
       const result = await getCompanyAsync(accountNumber);
       const changes = await getLicenseChanges(result.companyId);
+
+      console.log(accountNumber);
 
       console.log(result);
       console.log(changes);
@@ -31,8 +33,8 @@ const DealerContainer: FC = () => {
       setCompanyLicenseChanges(changes);
     };
 
-    doGetCompany(Number(searchParams));
-  }, [searchParams]);
+    doGetCompany(Number(accountNumber));
+  }, [accountNumber]);
 
   return (
     <Page title={String(company?.companyName)}>

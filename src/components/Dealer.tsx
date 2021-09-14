@@ -1,10 +1,10 @@
-import { FC } from "react";
+import { FC, useEffect, useState } from "react";
 import { Company, updateCompany } from "../data/companies";
-import { useForm } from "react-hook-form";
-import { FieldInput } from "./Styles/Styles";
 import { useNavigate } from "react-router-dom";
 import LicenseChangeTable from "./LicenseChangeTable";
 import { LicenseChange } from "../data/companies";
+import CustomPagination from "./CustomPagination";
+import LicenseForm from "./LicenseForm";
 
 type FormData = {
   companyId: number;
@@ -19,11 +19,34 @@ type Props = {
 };
 
 const Dealer: FC<Props> = ({ company, licenseChanges }) => {
-  const { register, handleSubmit } = useForm<FormData>({
-    mode: "onBlur",
-  });
-
   const navigate = useNavigate();
+
+  const [list, setList] = useState<LicenseChange[]>([]);
+
+  const [pageNumber, setPageNumber] = useState(1);
+  const [pageSize, setPageSize] = useState(5);
+
+  const endIndex: number = pageNumber * pageSize;
+  const startIndex: number = endIndex - pageSize;
+  const currentPage: LicenseChange[] = list.slice(startIndex, endIndex);
+  const lastPage: number = Math.ceil(licenseChanges.length / pageSize);
+  const disablePrevious: boolean = pageNumber === 1 ? true : false;
+  const disableNext: boolean = currentPage.length < pageSize ? true : false;
+
+  useEffect(() => {
+    setList(licenseChanges);
+  }, [licenseChanges]);
+
+  const next = () => {
+    let nextPageNumber = pageNumber + 1;
+
+    setPageNumber(nextPageNumber);
+  };
+
+  const previous = () => {
+    let previousPageNumber = pageNumber - 1;
+    setPageNumber(previousPageNumber);
+  };
 
   const submitForm = async (data: FormData) => {
     await updateCompany({
@@ -42,59 +65,16 @@ const Dealer: FC<Props> = ({ company, licenseChanges }) => {
   return (
     <div className="d-flex flex-column justify-content-around">
       <div className="m-3 p-3">
-        <h5>Update Licenses</h5>
-        <form onSubmit={handleSubmit(submitForm)} className="w-25">
-          <input
-            ref={register}
-            defaultValue={company?.companyId}
-            type="text"
-            name="companyId"
-            id="companyId"
-            hidden
-            readOnly
-          />
-          <label className="form-label">Desktop</label>
-          <div className="input-group mb-2">
-            <input
-              type="number"
-              min="0"
-              ref={register}
-              defaultValue={company?.licenses}
-              id="licenseCount"
-              name="licenseCount"
-              className="form-control"
-            />
-          </div>
-          <label className="form-label">Mobile</label>
-          <div className="input-group mb-2">
-            <input
-              ref={register}
-              defaultValue={company?.licensesMobileCount}
-              type="number"
-              min="0"
-              id="mobileLicenseCount"
-              name="mobileLicenseCount"
-              className="form-control"
-            />
-          </div>
-          <label className="form-label" htmlFor="trialLicenseCount">
-            Trial
-          </label>
-          <div className="form-group mb-2">
-            <FieldInput
-              ref={register}
-              defaultValue={company?.trialLicenses}
-              type="number"
-              min="0"
-              id="trialLicenseCount"
-              name="trialLicenseCount"
-            />
-          </div>
-          <button className="btn btn-primary" type="submit" id="btn-submit">
-            Submit
-          </button>
-        </form>
-        <LicenseChangeTable licenseChanges={licenseChanges} />
+        <LicenseForm company={company} submitForm={async () => submitForm} />
+        <LicenseChangeTable licenseChanges={currentPage} />
+        <CustomPagination
+          nextPage={next}
+          previousPage={previous}
+          currentPage={pageNumber}
+          lastPage={lastPage}
+          disableNextButton={disableNext}
+          disablePreviousButton={disablePrevious}
+        />
       </div>
     </div>
   );

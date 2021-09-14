@@ -19,7 +19,7 @@ const CustomPagination: FC<Props> = ({
   disablePreviousButton,
 }) => {
   return (
-    <div className="d-flex justify-content-between">
+    <div className="d-flex justify-content-between m-1 p-2">
       <PrimaryButton
         className="btn"
         onClick={previousPage}

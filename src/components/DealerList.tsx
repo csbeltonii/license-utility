@@ -7,7 +7,7 @@ type Props = {
 const DealerList: FC<Props> = ({ children }) => {
   return (
     <div className="m-1 p-2">
-      <table className="table table-hover table-sm">{children}</table>
+      <table className="table table-hover table-responsive">{children}</table>
     </div>
   );
 };

@@ -17,7 +17,7 @@ const HomePage = () => {
   const endIndex: number = pageNumber * pageSize;
   const startIndex: number = endIndex - pageSize;
   const currentPage: Company[] = companiesList.slice(startIndex, endIndex);
-  const lastPage: number = Math.round(companiesList.length / pageSize) + 1;
+  const lastPage: number = Math.ceil(companiesList.length / pageSize);
   const disablePrevious: boolean = pageNumber === 1 ? true : false;
   const disableNext: boolean = currentPage.length < pageSize ? true : false;
 

@@ -1,22 +1,23 @@
 /** @jsxImportSource @emotion/react */
-import React from "react";
+import { FC, ReactNode } from "react";
 import { css } from "@emotion/react";
 
 import PageTitle from "./PageTitle";
 
 interface Props {
   title: string;
-  children: React.ReactNode;
+  children: ReactNode;
 }
 
-const Page = ({ children, title }: Props) => {
+const Page: FC<Props> = ({ children, title }) => {
   return (
     <div
       className="container"
       id="dealer-list"
       css={css`
         background-color: white;
-        padding: 20px;
+        padding: 50px;
+        height: 100vh;
       `}
     >
       {<PageTitle title={title} />}

@@ -20,8 +20,10 @@ const LicenseChangeTable: FC<Props> = ({ licenseChanges }) => {
 
     return licenseChanges.map((change: LicenseChange) => {
       return (
-        <tr key={rowNumber}>
-          <td>{new Date(change.changeDate).toLocaleDateString()}</td>
+        <tr key={rowNumber++}>
+          <td className="">
+            {new Date(change.changeDate).toLocaleDateString()}
+          </td>
           <td>{change.licenseBefore}</td>
           <td>{change.licenseAfter}</td>
           <td className="text-right">
@@ -38,9 +40,9 @@ const LicenseChangeTable: FC<Props> = ({ licenseChanges }) => {
 
   return (
     <>
-      <div className="m-3 p-3">
+      <div className="">
         <h5>History</h5>
-        <table className="table table-response table-hover table-striped">
+        <table className="table table-responsive table-hover table-striped">
           <thead>
             <tr>
               <th>Change Date</th>
