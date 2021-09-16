@@ -1,17 +1,9 @@
 import { FC, useEffect, useState } from "react";
 import { Company } from "../data/companies";
-import { useNavigate } from "react-router-dom";
 import LicenseChangeTable from "./LicenseChangeTable";
 import { LicenseChange } from "../data/companies";
 import CustomPagination from "./CustomPagination";
 import LicenseForm from "./LicenseForm";
-
-type FormData = {
-  companyId: number;
-  licenseCount: number;
-  mobileLicenseCount: number;
-  trialLicenseCount: number;
-};
 
 type Props = {
   company: Company | undefined;

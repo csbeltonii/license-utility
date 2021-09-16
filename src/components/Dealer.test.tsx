@@ -1,29 +1,26 @@
 import { render, cleanup } from "@testing-library/react";
 import Dealer from "./Dealer";
 import { BrowserRouter } from "react-router-dom";
+import { Company, LicenseChange } from "../data/companies";
 
 afterEach(cleanup);
 
 test("When component is rendered with no license changes, it should show the correct message.", async () => {
-  jest.mock("../data/companies", () => ({
-    getCompanyAsync: jest.fn(() => {
-      return Promise.resolve({
-        CompanyId: 1,
-        CompanyName: "Craig Test",
-        AccountNumber: 1,
-        Licenses: 1,
-        LicensesMobileCount: 1,
-        TrialLicenses: 0,
-      });
-    }),
-    getLicenseChanges: jest.fn(() => {
-      return Promise.resolve([]);
-    }),
-  }));
+  const company: Company = {
+    companyId: 1,
+    companyName: "Craig Test",
+    accountNumber: 1,
+    licenses: 1,
+    licensesMobileCount: 1,
+    trialLicenses: 0,
+    licenseChanges: [],
+  };
+
+  const changes: LicenseChange[] = [];
 
   const { findByText } = render(
     <BrowserRouter>
-      <Dealer />
+      <Dealer company={company} licenseChanges={changes} />
     </BrowserRouter>
   );
 
@@ -33,40 +30,36 @@ test("When component is rendered with no license changes, it should show the cor
 });
 
 test("When the component is rendered with license changes, it should show the correct information", async () => {
-  jest.mock("../data/companies", () => ({
-    getCompanyAsync: jest.fn(() => {
-      return Promise.resolve({
-        CompanyId: 1,
-        CompanyName: "Craig Test",
-        AccountNumber: 1,
-        Licenses: 1,
-        LicensesMobileCount: 1,
-        TrialLicenses: 0,
-      });
-    }),
-    getLicenseChanges: jest.fn(() => {
-      return Promise.resolve([
-        {
-          companyId: 1,
-          licenseBefore: 3,
-          licenseAfter: 5,
-          changeDate: new Date(1, 1, 2021),
-          changeType: "Desktop",
-        },
-        {
-          companyId: 1,
-          licenseBefore: 4,
-          licenseAfter: 5,
-          changeDate: new Date(1, 1, 2021),
-          changeType: "Mobile",
-        },
-      ]);
-    }),
-  }));
+  const company: Company = {
+    companyId: 1,
+    companyName: "Craig Test",
+    accountNumber: 1,
+    licenses: 1,
+    licensesMobileCount: 1,
+    trialLicenses: 0,
+    licenseChanges: [],
+  };
+
+  const licenseChanges: LicenseChange[] = [
+    {
+      companyId: 1,
+      licenseBefore: 3,
+      licenseAfter: 5,
+      changeDate: new Date(1, 1, 2021),
+      changeType: "Desktop",
+    },
+    {
+      companyId: 1,
+      licenseBefore: 4,
+      licenseAfter: 5,
+      changeDate: new Date(1, 1, 2021),
+      changeType: "Mobile",
+    },
+  ];
 
   const { findByText } = render(
     <BrowserRouter>
-      <Dealer />
+      <Dealer company={company} licenseChanges={licenseChanges} />
     </BrowserRouter>
   );
 
