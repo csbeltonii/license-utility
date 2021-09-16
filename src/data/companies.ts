@@ -88,11 +88,12 @@ const mapCompanyFromServer = (data: CompanyFromServer): Company => ({
   licenseChanges: [],
 });
 
-export const getCompaniesAsync = async (): Promise<Company[]> => {
+export const getCompaniesAsync = async (token: string): Promise<Company[]> => {
   let request = new Request(`${webApiUrl}/Company/companies`, {
     method: "get",
     headers: {
       "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
     },
   });
 
@@ -108,12 +109,14 @@ export const getCompaniesAsync = async (): Promise<Company[]> => {
 };
 
 export const getCompanyAsync = async (
-  accountNumber: number
+  accountNumber: number,
+  token: string
 ): Promise<Company> => {
   const request = new Request(`${webApiUrl}/Company/${accountNumber}`, {
     method: "get",
     headers: {
       "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
     },
   });
 
@@ -137,7 +140,8 @@ export const getCompanyAsync = async (
 };
 
 export const updateCompany = async (
-  updatedCompany: Company
+  updatedCompany: Company,
+  token: string
 ): Promise<boolean> => {
   const request = new Request(
     `${webApiUrl}/Company/${updatedCompany.companyId}`,
@@ -146,6 +150,7 @@ export const updateCompany = async (
       body: JSON.stringify(updatedCompany),
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
     }
   );
@@ -160,12 +165,14 @@ export const updateCompany = async (
 };
 
 export const getLicenseChanges = async (
-  companyId: number
+  companyId: number,
+  token: string
 ): Promise<LicenseChange[]> => {
   const request = new Request(`${webApiUrl}/LicenseChange/${companyId}`, {
     method: "get",
     headers: {
       "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
     },
   });
 

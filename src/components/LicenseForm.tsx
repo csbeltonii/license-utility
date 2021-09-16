@@ -1,7 +1,11 @@
 import { FC } from "react";
-import { FieldInput, PrimaryButton } from "./Styles/Styles";
+import { PrimaryButton } from "./Styles/Styles";
 import { useForm } from "react-hook-form";
 import { Company } from "../data/companies";
+import { SilentRequest } from "@azure/msal-browser";
+import { updateCompany } from "../data/companies";
+import { useMsal } from "@azure/msal-react";
+import { useNavigate } from "react-router-dom";
 
 type FormData = {
   companyId: number;
@@ -12,12 +16,43 @@ type FormData = {
 
 type Props = {
   company: Company | undefined;
-  submitForm: () => void;
 };
-const LicenseForm: FC<Props> = ({ company, submitForm }) => {
+const LicenseForm: FC<Props> = ({ company }) => {
   const { register, handleSubmit } = useForm<FormData>({
     mode: "onBlur",
   });
+
+  const { instance } = useMsal();
+  const navigate = useNavigate();
+
+  const submitForm = async (data: FormData) => {
+    console.log("here");
+
+    const account = instance.getAllAccounts()[0];
+
+    const silentRequest: SilentRequest = {
+      scopes: ["api://7596909a-6bed-4d94-8467-4b2ac34a578f/access_user_data"],
+      account: account,
+    };
+
+    const token = await instance.acquireTokenSilent(silentRequest);
+
+    await updateCompany(
+      {
+        companyId: data.companyId,
+        companyName: "",
+        accountNumber: 0,
+        licenses: data.licenseCount,
+        licensesMobileCount: data.mobileLicenseCount,
+        trialLicenses: data.trialLicenseCount,
+        licenseChanges: [],
+      },
+      token.accessToken
+    );
+
+    navigate("/");
+  };
+
   return (
     <>
       <h5>Update Licenses</h5>

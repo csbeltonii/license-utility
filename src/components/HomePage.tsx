@@ -6,19 +6,20 @@ import DealerListSearch from "./DealerListSearch";
 import CustomPagination from "./CustomPagination";
 import DealerTableHeader from "./DealerTableHeader";
 import DealerTableBody from "./DealerTableBody";
-import { useIsAuthenticated, useMsalAuthentication } from "@azure/msal-react";
-import { InteractionType } from "@azure/msal-browser";
-import { request } from "http";
+import { useIsAuthenticated, useMsal } from "@azure/msal-react";
+import { SignInButton } from "./SignInButton";
+import { SignOutButton } from "./SignOutButton";
+import { SilentRequest } from "@azure/msal-browser";
 
 const HomePage = () => {
   const [fullCompaniesList, setFullCompaniesList] = useState<Company[]>([]);
   const [companiesList, setCompaniesList] = useState<Company[]>([]);
 
   const [pageNumber, setPageNumber] = useState(1);
-  const [pageSize, setPageSize] = useState(10);
+  const [pageSize] = useState(10);
 
   const isAuthenticated = useIsAuthenticated();
-  const {} = useMsalAuthentication(InteractionType.Popup);
+  const { instance } = useMsal();
 
   const endIndex: number = pageNumber * pageSize;
   const startIndex: number = endIndex - pageSize;
@@ -28,11 +29,22 @@ const HomePage = () => {
   const disableNext: boolean = currentPage.length < pageSize ? true : false;
 
   const getCompanies = useCallback(async () => {
-    const companies = await getCompaniesAsync();
+    if (isAuthenticated) {
+      const account = instance.getAllAccounts()[0];
 
-    setCompaniesList(companies);
-    setFullCompaniesList(companies);
-  }, []);
+      const silentRequest: SilentRequest = {
+        scopes: ["api://7596909a-6bed-4d94-8467-4b2ac34a578f/access_user_data"],
+        account: account,
+      };
+
+      const token = await instance.acquireTokenSilent(silentRequest);
+
+      const companies = await getCompaniesAsync(token.accessToken);
+
+      setCompaniesList(companies);
+      setFullCompaniesList(companies);
+    }
+  }, [instance, isAuthenticated]);
 
   useEffect(() => {
     getCompanies();
@@ -66,19 +78,29 @@ const HomePage = () => {
 
   return (
     <Page title="Dealers">
-      <DealerListSearch handleSearchChange={handleSearchChange} />
-      <DealerList>
-        <DealerTableHeader />
-        <DealerTableBody companies={currentPage} />
-      </DealerList>
-      <CustomPagination
-        nextPage={next}
-        previousPage={previous}
-        currentPage={pageNumber}
-        lastPage={lastPage}
-        disableNextButton={disableNext}
-        disablePreviousButton={disablePrevious}
-      />
+      {isAuthenticated === false ? (
+        <div className="p-3 m-2">
+          <h2>You must login to use this application.</h2>
+          <SignInButton />
+        </div>
+      ) : (
+        <>
+          <SignOutButton />
+          <DealerListSearch handleSearchChange={handleSearchChange} />
+          <DealerList>
+            <DealerTableHeader />
+            <DealerTableBody companies={currentPage} />
+          </DealerList>
+          <CustomPagination
+            nextPage={next}
+            previousPage={previous}
+            currentPage={pageNumber}
+            lastPage={lastPage}
+            disableNextButton={disableNext}
+            disablePreviousButton={disablePrevious}
+          />
+        </>
+      )}
     </Page>
   );
 };

@@ -1,5 +1,5 @@
 import { FC, useEffect, useState } from "react";
-import { Company, updateCompany } from "../data/companies";
+import { Company } from "../data/companies";
 import { useNavigate } from "react-router-dom";
 import LicenseChangeTable from "./LicenseChangeTable";
 import { LicenseChange } from "../data/companies";
@@ -19,12 +19,10 @@ type Props = {
 };
 
 const Dealer: FC<Props> = ({ company, licenseChanges }) => {
-  const navigate = useNavigate();
-
   const [list, setList] = useState<LicenseChange[]>([]);
 
   const [pageNumber, setPageNumber] = useState(1);
-  const [pageSize, setPageSize] = useState(5);
+  const [pageSize] = useState(5);
 
   const endIndex: number = pageNumber * pageSize;
   const startIndex: number = endIndex - pageSize;
@@ -48,24 +46,10 @@ const Dealer: FC<Props> = ({ company, licenseChanges }) => {
     setPageNumber(previousPageNumber);
   };
 
-  const submitForm = async (data: FormData) => {
-    await updateCompany({
-      companyId: data.companyId,
-      companyName: "",
-      accountNumber: 0,
-      licenses: data.licenseCount,
-      licensesMobileCount: data.mobileLicenseCount,
-      trialLicenses: data.trialLicenseCount,
-      licenseChanges: [],
-    });
-
-    navigate("/");
-  };
-
   return (
     <div className="d-flex flex-column justify-content-around">
       <div className="m-3 p-3">
-        <LicenseForm company={company} submitForm={async () => submitForm} />
+        <LicenseForm company={company} />
         <LicenseChangeTable licenseChanges={currentPage} />
         <CustomPagination
           nextPage={next}
