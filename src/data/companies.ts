@@ -10,6 +10,15 @@ export interface Company {
   licenseChanges: [];
 }
 
+export interface UpdateCompanyRequest {
+  companyId: number;
+  accountNumber: number;
+  licenses: number;
+  licensesMobileCount: number;
+  trialLicenses: number;
+  changedBy: string | undefined;
+}
+
 export interface LicenseChange {
   companyId: number;
   licenseBefore: number;
@@ -140,7 +149,7 @@ export const getCompanyAsync = async (
 };
 
 export const updateCompany = async (
-  updatedCompany: Company,
+  updatedCompany: UpdateCompanyRequest,
   token: string
 ): Promise<boolean> => {
   const request = new Request(

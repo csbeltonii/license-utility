@@ -3,7 +3,7 @@ interface Props {
 }
 
 const PageTitle = ({ title }: Props) => {
-  return <h1 className="jumbrotron m-1 p-3">{title}</h1>;
+  return <h1 className="jumbrotron m-1 p-1">{title}</h1>;
 };
 
 export default PageTitle;

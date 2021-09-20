@@ -26,9 +26,8 @@ const LicenseForm: FC<Props> = ({ company }) => {
   const navigate = useNavigate();
 
   const submitForm = async (data: FormData) => {
-    console.log("here");
-
     const account = instance.getAllAccounts()[0];
+    const user = account.name;
 
     const silentRequest: SilentRequest = {
       scopes: ["api://7596909a-6bed-4d94-8467-4b2ac34a578f/access_user_data"],
@@ -40,12 +39,11 @@ const LicenseForm: FC<Props> = ({ company }) => {
     await updateCompany(
       {
         companyId: data.companyId,
-        companyName: "",
         accountNumber: 0,
         licenses: data.licenseCount,
         licensesMobileCount: data.mobileLicenseCount,
         trialLicenses: data.trialLicenseCount,
-        licenseChanges: [],
+        changedBy: user,
       },
       token.accessToken
     );

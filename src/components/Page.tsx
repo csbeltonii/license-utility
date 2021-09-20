@@ -16,7 +16,7 @@ const Page: FC<Props> = ({ children, title }) => {
       id="dealer-list"
       css={css`
         background-color: white;
-        padding: 50px;
+        padding: 20px;
         height: 100vh;
       `}
     >
