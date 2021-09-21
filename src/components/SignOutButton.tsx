@@ -12,8 +12,11 @@ export const SignOutButton = () => {
   };
 
   return (
-    <PrimaryButton onClick={handleSignOut} className="btn">
-      Sign Out
-    </PrimaryButton>
+    <div className="d-flex align-items-center">
+      <div className="m-2">{instance.getActiveAccount()?.username}</div>
+      <PrimaryButton onClick={handleSignOut} className="btn">
+        Sign Out
+      </PrimaryButton>
+    </div>
   );
 };

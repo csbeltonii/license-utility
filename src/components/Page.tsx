@@ -2,8 +2,6 @@
 import { FC, ReactNode } from "react";
 import { css } from "@emotion/react";
 
-import PageTitle from "./PageTitle";
-
 interface Props {
   title: string;
   children: ReactNode;
@@ -20,7 +18,6 @@ const Page: FC<Props> = ({ children, title }) => {
         height: 100vh;
       `}
     >
-      {<PageTitle title={title} />}
       {children}
     </div>
   );

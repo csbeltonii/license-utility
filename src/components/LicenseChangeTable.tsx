@@ -33,6 +33,7 @@ const LicenseChangeTable: FC<Props> = ({ licenseChanges }) => {
               ? "Mobile"
               : " Mobile Trial"}
           </td>
+          <td>{change.changedBy}</td>
         </tr>
       );
     });
@@ -49,6 +50,7 @@ const LicenseChangeTable: FC<Props> = ({ licenseChanges }) => {
               <th>Previous</th>
               <th>After</th>
               <th>Change Type</th>
+              <th>Changed By</th>
             </tr>
           </thead>
           <tbody>{renderBody()}</tbody>

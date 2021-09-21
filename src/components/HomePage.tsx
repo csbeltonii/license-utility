@@ -7,13 +7,12 @@ import CustomPagination from "./CustomPagination";
 import DealerTableHeader from "./DealerTableHeader";
 import DealerTableBody from "./DealerTableBody";
 import { useIsAuthenticated, useMsal } from "@azure/msal-react";
-import { SignInButton } from "./SignInButton";
-import { SignOutButton } from "./SignOutButton";
 import { SilentRequest } from "@azure/msal-browser";
 
 const HomePage = () => {
   const [fullCompaniesList, setFullCompaniesList] = useState<Company[]>([]);
   const [companiesList, setCompaniesList] = useState<Company[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const [pageNumber, setPageNumber] = useState(1);
   const [pageSize] = useState(10);
@@ -31,20 +30,21 @@ const HomePage = () => {
   const getCompanies = useCallback(async () => {
     if (isAuthenticated) {
       const account = instance.getAllAccounts()[0];
-
       const silentRequest: SilentRequest = {
-        scopes: ["api://7596909a-6bed-4d94-8467-4b2ac34a578f/access_user_data"],
+        scopes: ["api://a22e7296-106f-4a00-af8d-f86edb386a1b/api_access"],
         account: account,
       };
-
       const token = await instance.acquireTokenSilent(silentRequest);
 
+      setIsLoading(true);
       const companies = await getCompaniesAsync(token.accessToken);
 
       setCompaniesList(companies);
       setFullCompaniesList(companies);
+
+      setIsLoading(false);
     }
-  }, [instance, isAuthenticated]);
+  }, [instance, isAuthenticated, setIsLoading]);
 
   useEffect(() => {
     getCompanies();
@@ -81,11 +81,9 @@ const HomePage = () => {
       {isAuthenticated === false ? (
         <div className="p-3 m-2">
           <h2>You must login to use this application.</h2>
-          <SignInButton />
         </div>
-      ) : (
+      ) : isLoading === false ? (
         <>
-          <SignOutButton />
           <DealerListSearch handleSearchChange={handleSearchChange} />
           <DealerList>
             <DealerTableHeader />
@@ -100,6 +98,10 @@ const HomePage = () => {
             disablePreviousButton={disablePrevious}
           />
         </>
+      ) : (
+        <div className="text-center">
+          <h2>Loading...</h2>
+        </div>
       )}
     </Page>
   );

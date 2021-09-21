@@ -1,4 +1,7 @@
-const webApiUrl = "https://localhost:44375/api";
+const webApiUrl =
+  process.env.ENV === "production"
+    ? "https://webservices.everlogic.com/LicenseUtilityApi/api"
+    : "https://localhost:44375/api";
 
 export interface Company {
   companyId: number;
@@ -11,7 +14,6 @@ export interface Company {
 }
 
 export interface UpdateCompanyRequest {
-  companyId: number;
   accountNumber: number;
   licenses: number;
   licensesMobileCount: number;
@@ -25,6 +27,7 @@ export interface LicenseChange {
   licenseAfter: number;
   changeDate: Date;
   changeType: string;
+  changedBy: string;
 }
 
 interface CompanyFromServer {
@@ -150,19 +153,17 @@ export const getCompanyAsync = async (
 
 export const updateCompany = async (
   updatedCompany: UpdateCompanyRequest,
+  companyId: number,
   token: string
 ): Promise<boolean> => {
-  const request = new Request(
-    `${webApiUrl}/Company/${updatedCompany.companyId}`,
-    {
-      method: "post",
-      body: JSON.stringify(updatedCompany),
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    }
-  );
+  const request = new Request(`${webApiUrl}/Company/${companyId}`, {
+    method: "post",
+    body: JSON.stringify(updatedCompany),
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  });
 
   const response = await fetch(request);
 

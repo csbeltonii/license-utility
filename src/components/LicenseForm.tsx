@@ -30,7 +30,7 @@ const LicenseForm: FC<Props> = ({ company }) => {
     const user = account.name;
 
     const silentRequest: SilentRequest = {
-      scopes: ["api://7596909a-6bed-4d94-8467-4b2ac34a578f/access_user_data"],
+      scopes: ["api://a22e7296-106f-4a00-af8d-f86edb386a1b/api_access"],
       account: account,
     };
 
@@ -38,13 +38,13 @@ const LicenseForm: FC<Props> = ({ company }) => {
 
     await updateCompany(
       {
-        companyId: data.companyId,
         accountNumber: 0,
         licenses: data.licenseCount,
         licensesMobileCount: data.mobileLicenseCount,
         trialLicenses: data.trialLicenseCount,
         changedBy: user,
       },
+      data.companyId,
       token.accessToken
     );
 

@@ -14,10 +14,10 @@ import { SilentRequest } from "@azure/msal-browser";
 
 const DealerContainer: FC = () => {
   const [company, setCompany] = useState<Company>();
-
   const [companyLicenseChanges, setCompanyLicenseChanges] = useState<
     LicenseChange[]
   >([]);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const { accountNumber } = useParams();
   const { instance } = useMsal();
@@ -26,14 +26,12 @@ const DealerContainer: FC = () => {
     const account = instance.getAllAccounts()[0];
 
     const silentRequest: SilentRequest = {
-      scopes: ["api://7596909a-6bed-4d94-8467-4b2ac34a578f/access_user_data"],
+      scopes: ["api://a22e7296-106f-4a00-af8d-f86edb386a1b/api_access"],
       account: account,
     };
 
     const token = await instance.acquireTokenSilent(silentRequest);
-
-    console.log(token.accessToken);
-
+    setIsLoading(true);
     const company = await getCompanyAsync(
       Number(accountNumber),
       token.accessToken
@@ -46,7 +44,8 @@ const DealerContainer: FC = () => {
 
     setCompany(company);
     setCompanyLicenseChanges(changes);
-  }, [accountNumber, instance]);
+    setIsLoading(false);
+  }, [accountNumber, instance, setIsLoading]);
 
   useEffect(() => {
     populate();
@@ -54,7 +53,11 @@ const DealerContainer: FC = () => {
 
   return (
     <Page title={String(company?.companyName)}>
-      <Dealer company={company} licenseChanges={companyLicenseChanges} />
+      {isLoading ? (
+        <div>Loading...</div>
+      ) : (
+        <Dealer company={company} licenseChanges={companyLicenseChanges} />
+      )}
     </Page>
   );
 };

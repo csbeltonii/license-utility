@@ -4,6 +4,7 @@ import LicenseChangeTable from "./LicenseChangeTable";
 import { LicenseChange } from "../data/companies";
 import CustomPagination from "./CustomPagination";
 import LicenseForm from "./LicenseForm";
+import PageTitle from "./PageTitle";
 
 type Props = {
   company: Company | undefined;
@@ -40,7 +41,8 @@ const Dealer: FC<Props> = ({ company, licenseChanges }) => {
 
   return (
     <div className="d-flex flex-column justify-content-around">
-      <div className="m-3 p-3">
+      <div className="m-1 p-1">
+        <PageTitle title={company?.companyName} />
         <LicenseForm company={company} />
         <LicenseChangeTable licenseChanges={currentPage} />
         <CustomPagination
