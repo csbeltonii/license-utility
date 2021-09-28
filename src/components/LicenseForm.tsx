@@ -38,13 +38,13 @@ const LicenseForm: FC<Props> = ({ company }) => {
 
     await updateCompany(
       {
+        companyId: data.companyId,
         accountNumber: 0,
         licenses: data.licenseCount,
         licensesMobileCount: data.mobileLicenseCount,
         trialLicenses: data.trialLicenseCount,
         changedBy: user,
       },
-      data.companyId,
       token.accessToken
     );
 

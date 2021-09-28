@@ -1,7 +1,5 @@
-const webApiUrl =
-  process.env.ENV === "production"
-    ? "https://webservices.everlogic.com/LicenseUtilityApi/api"
-    : "https://localhost:44375/api";
+const webApiUrl = "https://utility.everlogic.com/api";
+//const webApiUrl = "https://localhost:44375/api";
 
 export interface Company {
   companyId: number;
@@ -14,6 +12,7 @@ export interface Company {
 }
 
 export interface UpdateCompanyRequest {
+  companyId: number;
   accountNumber: number;
   licenses: number;
   licensesMobileCount: number;
@@ -153,10 +152,9 @@ export const getCompanyAsync = async (
 
 export const updateCompany = async (
   updatedCompany: UpdateCompanyRequest,
-  companyId: number,
   token: string
 ): Promise<boolean> => {
-  const request = new Request(`${webApiUrl}/Company/${companyId}`, {
+  const request = new Request(`${webApiUrl}/Company`, {
     method: "post",
     body: JSON.stringify(updatedCompany),
     headers: {

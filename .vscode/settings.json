@@ -1,0 +1,4 @@
+{
+  "appService.defaultWebAppToDeploy": "/subscriptions/82703161-fc78-4aca-82b2-5c7cb8e14019/resourceGroups/license-utility/providers/Microsoft.Web/sites/elogic-license-utility",
+  "appService.deploySubpath": "build"
+}

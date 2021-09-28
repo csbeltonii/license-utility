@@ -7,6 +7,9 @@ export const msalConfig: Configuration = {
     authority:
       "https://login.microsoftonline.com/46450200-7477-4c00-bfd0-9c88835db8e4",
     redirectUri: "/",
+    // process.env.NODE_ENV === "production"
+    //   ? "https://elogic-license-utility.azurewebsites.net/"
+    //   : "/",
   },
   cache: {
     cacheLocation: "sessionStorage",
