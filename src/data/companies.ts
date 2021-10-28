@@ -1,5 +1,7 @@
-const webApiUrl = "https://utility.everlogic.com/api";
-//const webApiUrl = "https://localhost:44375/api";
+const webApiUrl =
+  process.env.APP_ENV === "production"
+    ? "https://utility.everlogic.com/api"
+    : "https://localhost:44375/api";
 
 export interface Company {
   companyId: number;
