@@ -6,6 +6,7 @@ import { MsalProvider } from "@azure/msal-react";
 import { PublicClientApplication } from "@azure/msal-browser";
 import { msalConfig } from "./utility/authConfig";
 import NavBar from "./components/NavBar";
+import AuditPage from "./components/AuditPage";
 
 const msalInstance = new PublicClientApplication(msalConfig);
 
@@ -17,6 +18,7 @@ function App() {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/dealer/:accountNumber" element={<DealerContainer />} />
+          <Route path="/audit" element={<AuditPage />} />
         </Routes>
       </BrowserRouter>
     </MsalProvider>

@@ -1,7 +1,5 @@
-const webApiUrl =
-  process.env.APP_ENV === "production"
-    ? "https://utility.everlogic.com/api"
-    : "https://localhost:44375/api";
+//const webApiUrl = "https://utility.everlogic.com/api"; // production
+const webApiUrl = "https://localhost:44375/api"; // testing
 
 export interface Company {
   companyId: number;
@@ -89,6 +87,47 @@ interface CompanyFromServer {
   versionSpec: string;
   webServerId: number;
   webServerIdNew: number;
+}
+
+export interface LicenseTotals {
+  totalDealerships: number;
+  totalDesktopLicenses: number;
+  totalMobileLicenses: number;
+}
+
+export interface CustomerChanges {
+  lostCustomers: number;
+  newCustomers: number;
+}
+
+export interface Counts {
+  desktopIncreases: number;
+  desktopDecreases: number;
+  mobileIncreases: number;
+  mobileDecreases: number;
+}
+
+export interface LicenseChangeAudit {
+  changeId: number;
+  licenseAfter: string;
+  licenseBefore: string;
+  companyName: string;
+  changeDate: Date;
+  changeType: string;
+  changedBy: string;
+  difference: number;
+}
+
+export interface MonthlyLicenseAudit {
+  totals: LicenseTotals;
+  customerChanges: CustomerChanges;
+  counts: Counts;
+  licenseChanges: LicenseChangeAudit[];
+}
+
+export interface AuditRequest {
+  startDate: Date;
+  endDate: Date;
 }
 
 const mapCompanyFromServer = (data: CompanyFromServer): Company => ({
@@ -194,5 +233,29 @@ export const getLicenseChanges = async (
     return changes;
   } else {
     return [];
+  }
+};
+
+export const getAudit = async (
+  timeFrame: AuditRequest,
+  token: string
+): Promise<MonthlyLicenseAudit | null> => {
+  const request = new Request(`${webApiUrl}/audit`, {
+    method: "post",
+    body: JSON.stringify(timeFrame),
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  const response = await fetch(request);
+
+  if (response.ok) {
+    const audit = await response.json();
+
+    return audit;
+  } else {
+    return null;
   }
 };
