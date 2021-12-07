@@ -8,7 +8,8 @@ import {
 } from "../data/companies";
 import { SilentRequest } from "@azure/msal-browser";
 import Page from "./Page";
-import Totals from "./Totals";
+import Totals from "./TotalsTable";
+import NewLostCustomersTable from "./NewLostCustomersTable";
 
 const AuditPage: FC = () => {
   const [audit, setAudit] = useState<MonthlyLicenseAudit | null>();
@@ -41,11 +42,10 @@ const AuditPage: FC = () => {
   return (
     <Page title={"Audit"}>
       <Totals licenseTotals={audit?.totals} />
+      <NewLostCustomersTable customerChanges={audit?.customerChanges} />
       <table className="table">
         <thead>
           <tr>
-            <th className="text-center">New</th>
-            <th className="text-center">Lost</th>
             <th className="text-center">Increased Desktop</th>
             <th className="text-center">Increased Mobile</th>
             <th className="text-center">Decreased Desktop</th>
@@ -54,8 +54,6 @@ const AuditPage: FC = () => {
         </thead>
         <tbody>
           <tr>
-            <td className="text-end">{audit?.customerChanges.newCustomers}</td>
-            <td className="text-end">{audit?.customerChanges.lostCustomers}</td>
             <td className="text-end">{audit?.counts.desktopIncreases}</td>
             <td className="text-end">{audit?.counts.mobileIncreases}</td>
             <td className="text-end">{audit?.counts.desktopDecreases}</td>

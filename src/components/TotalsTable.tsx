@@ -13,7 +13,7 @@ const Totals: FC<Props> = ({ licenseTotals }) => {
           <th colSpan={3}>Licenses</th>
         </tr>
         <tr>
-          <th className="text-center">Total</th>
+          <th className="text-center">Customers</th>
           <th className="text-center">Desktop</th>
           <th className="text-center">Mobile</th>
         </tr>
