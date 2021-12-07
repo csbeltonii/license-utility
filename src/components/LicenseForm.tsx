@@ -71,8 +71,8 @@ const LicenseForm: FC<Props> = ({ company }) => {
             </label>
             <input
               type="number"
-              min="0"
-              ref={register}
+              min="3"
+              ref={register({ min: 3 })}
               defaultValue={company?.licenses}
               id="licenseCount"
               name="licenseCount"
