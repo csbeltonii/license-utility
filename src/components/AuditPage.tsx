@@ -1,21 +1,26 @@
-import { useMsal } from "@azure/msal-react";
-import { useCallback, useState, FC, useEffect } from "react";
-import {
-  AuditRequest,
-  getAudit,
-  MonthlyLicenseAudit,
-  LicenseChangeAudit,
-} from "../data/companies";
+import { useIsAuthenticated, useMsal } from "@azure/msal-react";
+import { useState, FC } from "react";
+import { AuditRequest, getAudit, MonthlyLicenseAudit } from "../data/companies";
 import { SilentRequest } from "@azure/msal-browser";
 import Page from "./Page";
-import Totals from "./TotalsTable";
+import TotalsTable from "./TotalsTable";
 import NewLostCustomersTable from "./NewLostCustomersTable";
+import LicenseDeltasTables from "./LicenseDeltasTables";
+import ItemizedAuditsTable from "./ItemizedAuditsTable";
+import AuditForm from "./AuditForm";
+
+type FormData = {
+  startDate: Date;
+  endDate: Date;
+};
 
 const AuditPage: FC = () => {
-  const [audit, setAudit] = useState<MonthlyLicenseAudit | null>();
+  const [audit, setAudit] = useState<MonthlyLicenseAudit | null>(null);
   const { instance } = useMsal();
 
-  const populate = useCallback(async () => {
+  const isAuthenticated = useIsAuthenticated();
+
+  const submit = async (data: FormData) => {
     const account = instance.getAllAccounts()[0];
 
     const silentRequest: SilentRequest = {
@@ -26,67 +31,36 @@ const AuditPage: FC = () => {
     const token = await instance.acquireTokenSilent(silentRequest);
 
     const request: AuditRequest = {
-      startDate: new Date("11/01/2021 00:00:00.000"),
-      endDate: new Date("11/30/2021 23:59:59.999"),
+      startDate: new Date(data.startDate),
+      endDate: new Date(data.endDate),
     };
 
     const audit = await getAudit(request, token.accessToken);
 
     setAudit(audit);
-  }, [instance]);
-
-  useEffect(() => {
-    populate();
-  }, [populate]);
+  };
 
   return (
     <Page title={"Audit"}>
-      <Totals licenseTotals={audit?.totals} />
-      <NewLostCustomersTable customerChanges={audit?.customerChanges} />
-      <table className="table">
-        <thead>
-          <tr>
-            <th className="text-center">Increased Desktop</th>
-            <th className="text-center">Increased Mobile</th>
-            <th className="text-center">Decreased Desktop</th>
-            <th className="text-center">Decreased Mobile</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td className="text-end">{audit?.counts.desktopIncreases}</td>
-            <td className="text-end">{audit?.counts.mobileIncreases}</td>
-            <td className="text-end">{audit?.counts.desktopDecreases}</td>
-            <td className="text-end">{audit?.counts.mobileDecreases}</td>
-          </tr>
-        </tbody>
-      </table>
-      <table className="table table-hover">
-        <thead>
-          <th className="text-center">Company</th>
-          <th className="text-center">Licenses Before</th>
-          <th className="text-center">Licenses After</th>
-          <th className="text-center">Difference</th>
-          <th className="text-center">Change Date</th>
-          <th className="text-center">Change Type</th>
-        </thead>
-        <tbody>
-          {audit?.licenseChanges.map((changeAudit: LicenseChangeAudit) => {
-            return (
-              <tr key={changeAudit.changeId}>
-                <td className="text-start">{changeAudit.companyName}</td>
-                <td className="text-end">{changeAudit.licenseBefore}</td>
-                <td className="text-end">{changeAudit.licenseAfter}</td>
-                <td className="text-end">{changeAudit.difference}</td>
-                <td className="text-end">
-                  {new Date(changeAudit.changeDate).toLocaleDateString()}
-                </td>
-                <td className="text-end">{changeAudit.changeType}</td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
+      {isAuthenticated === false ? (
+        <div className="p-3 m-2">
+          <h2>You must login to use this application.</h2>
+        </div>
+      ) : (
+        <>
+          <AuditForm submitForm={submit} />
+          {audit !== null ? (
+            <>
+              <TotalsTable licenseTotals={audit?.totals} />
+              <NewLostCustomersTable customerChanges={audit?.customerChanges} />
+              <LicenseDeltasTables counts={audit?.counts} />
+              <ItemizedAuditsTable changeAudits={audit?.licenseChanges} />
+            </>
+          ) : (
+            <></>
+          )}
+        </>
+      )}
     </Page>
   );
 };

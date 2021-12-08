@@ -5,6 +5,7 @@ import DealerContainer from "./components/DealerContainer";
 import { MsalProvider } from "@azure/msal-react";
 import { PublicClientApplication } from "@azure/msal-browser";
 import { msalConfig } from "./utility/authConfig";
+import TopBanner from "./components/TopBanner";
 import NavBar from "./components/NavBar";
 import AuditPage from "./components/AuditPage";
 
@@ -14,6 +15,7 @@ function App() {
   return (
     <MsalProvider instance={msalInstance}>
       <BrowserRouter>
+        <TopBanner />
         <NavBar />
         <Routes>
           <Route path="/" element={<HomePage />} />

@@ -5,7 +5,7 @@ interface Props {
   licenseTotals: LicenseTotals | undefined;
 }
 
-const Totals: FC<Props> = ({ licenseTotals }) => {
+const TotalsTable: FC<Props> = ({ licenseTotals }) => {
   return (
     <table className="table">
       <thead>
@@ -29,4 +29,4 @@ const Totals: FC<Props> = ({ licenseTotals }) => {
   );
 };
 
-export default Totals;
+export default TotalsTable;
